@@ -1,0 +1,21 @@
+<html>
+
+<head>
+	<title>George Ranch Soundboard</title>
+</head>
+
+<body>
+	<input id='my' type="text">
+	<script>
+		document.getElementById('my').onkeypress = function(event) {
+			var char = getChar(event || window.event)
+			if (!char) return // special key  
+				this.value = char.toUpperCase();
+			return false;
+		}
+	</script>
+
+
+</body>
+
+</html>
