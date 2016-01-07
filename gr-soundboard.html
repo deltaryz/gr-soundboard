@@ -1,18 +1,108 @@
-<html>
+<html ng-app>
 
 <head>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 	<title>George Ranch Soundboard</title>
 </head>
 
 <body>
+	<p id="chromenotice"><b>NOTICE: THIS PROGRAM ONLY WORKS IN <a href="http://chrome.google.com/">GOOGLE CHROME</a>.
+	<br/>If Chrome is not the default browser, right-click gr-soundboard.html, select "Open With", and press "Google Chrome".</b></p>
+	
+	Select the folder containing your sound effects:<br/>
+	<input type="file" onChange="loadFolder(event)" webkitdirectory>
+	<br/><br/>
+	<b>Please click inside this box to use the soundboard.</b><br/>
 	<input id='my' type="text">
+	<br /><br />
+	Type a character inside this box and press the corresponding button to set its play mode.<br/>
+	<input id="playmode" type="text"><button onclick="setMode('trigger')">Trigger</button><button onclick="setMode('toggle')">Toggle</button>
+	<br/><br/>
+	<p id='list'></p>
+	
 	<script>
+		if(navigator.userAgent.toLowerCase().indexOf('chrome') > -1){
+			document.getElementById("chromenotice").innerHTML = "";
+		}
+		var audioNames = {
+			names: [],
+			modes: []
+		};
+		var audioFiles = [];
+		
+		var currentPlayingAudio = undefined;
+		
 		document.getElementById('my').onkeypress = function(event) {
-			var char = getChar(event || window.event)
-			if (!char) return // special key  
-				this.value = char.toUpperCase();
+			if(currentPlayingAudio != undefined && currentPlayingAudio.paused){
+				currentPlayingAudio = undefined;
+			}
+			var char = getChar(event || window.event);
+			if (!char) return; // special key  
+			this.value = char;
+			var currentValue = audioNames.names.indexOf(char);
+			if(currentValue > -1){
+				if(audioNames.modes[currentValue] == "trigger"){
+					var audio = new Audio(char + '.wav');
+					audio.play();
+				}else if(audioNames.modes[currentValue] == "toggle"){
+					if(currentPlayingAudio === undefined){
+						currentPlayingAudio = new Audio(char + '.wav');
+						currentPlayingAudio.play();
+					}else{
+						currentPlayingAudio.pause();
+						currentPlayingAudio = undefined;
+					}
+				}
+			}
 			return false;
 		}
+		
+		// event.type must be keypress
+		function getChar(event) {
+			if (event.which == null) {
+				return String.fromCharCode(event.keyCode); // IE
+			} else if (event.which!=0 && event.charCode!=0) {
+				return String.fromCharCode(event.which);   // the rest
+			} else {
+				return null; // special key
+			}
+		}
+		
+		function loadFolder(e) {
+			audioFiles = e.target.files;
+			for (var i=0, file; file=audioFiles[i]; i++) {
+				if(file.name.indexOf(".wav") > -1){
+					audioNames.names.push(file.name.substr(0, file.name.length - 4));
+					audioNames.modes.push("trigger");
+					// document.getElementById("list").innerHTML += "<li>" + file.name.substr(0, file.name.length - 4);
+				}
+			}
+			
+			console.log(audioNames);
+
+			updateList();
+		}
+		
+		function setMode(mode){
+			var char = document.getElementById("playmode").value;
+			var charIndex = audioNames.names.indexOf(char);
+			
+			if(charIndex > -1){
+				audioNames.modes[charIndex] = mode;
+			}else{
+				console.log("Character doesn't exist.");
+			}
+			
+			updateList();
+		}
+		
+		function updateList(){
+			document.getElementById("list").innerHTML = "";
+			for(var i=0; i < audioNames.names.length; i++){
+				document.getElementById("list").innerHTML += "<li>" + audioNames.names[i] + ": " + audioNames.modes[i];
+			}
+		}
+
 	</script>
 
 
