@@ -19,6 +19,24 @@
 	<input id="playmode" type="text"><button onclick="setMode('trigger')">Trigger</button><button onclick="setMode('toggle')">Toggle</button>
 	<br/><br/>
 	<p id='list'></p>
+	<br/><br/>
+	<p><b>INSTRUCTIONS</b></p><br/>
+	Please place each of your sound cues in a designated folder in a place you will remember.<br/>
+	Each cue must have a filename consisting of a number or lowercase letter, followed by ".wav".<br/>
+	<br/>Any of the following are valid:<br/>
+	<li>1.wav
+	<li>a.wav
+	<li>h.wav<br/><br/>
+	But these are not:<br/>
+	<li>A.wav
+	<li>j.mp3
+	<li>knock.wav<br/><br/>
+	The filename will determine which key on the keyboard will trigger the sounds.<br/><br/>
+	There are two play modes: TRIGGER and TOGGLE.<br/>
+	The TRIGGER mode will play the sound from the beginning every time you press the button, and play until completion.<br/>
+	The TOGGLE mode will play the sound from the beginning, and pressing the button again will stop the sound as it is playing.<br/><br/>
+	If you have any songs or sound effects that are NOT a .wav file, please convert them using Audacity. If the file does not show up in the soundboard list when you select the folder, it is not a WAV file.<br/>
+	To do this, simply drag the audio into Audacity, click the "Stereo" text on the left side of the audio track, go to File -> Export Audio, and make sure the filetype is set to WAV 16-bit.
 	
 	<script>
 		if(navigator.userAgent.toLowerCase().indexOf('chrome') > -1){
