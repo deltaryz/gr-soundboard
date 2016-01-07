@@ -115,7 +115,7 @@
 		function updateList(){
 			document.getElementById("list").innerHTML = "<b>CURRENTLY LOADED SOUNDS:</b><br/>";
 			for(var i=0; i < audioNames.names.length; i++){
-				document.getElementById("list").innerHTML += "<li>" + audioNames.names[i] + ": " + audioNames.modes[i];
+				document.getElementById("list").innerHTML += "<li>" + audioNames.names[i].toUpperCase() + ": " + audioNames.modes[i];
 			}
 		}
 		
