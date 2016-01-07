@@ -5,7 +5,8 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
- 
+
+pygame.mixer.pre_init(44100, 16, 2, 4096) #frequency, size, channels, buffersize
 pygame.init()
  
 # Set the width and height of the screen [width, height]
@@ -13,7 +14,7 @@ size = (1024, 576)
 screen = pygame.display.set_mode(size)
  
 pygame.display.set_caption("gr-soundboard")
- 
+
 # Loop until the user clicks the close button.
 done = False
 
@@ -28,6 +29,9 @@ while not done:
 			done = True
  
 	# --- Game logic should go here
+	
+	pygame.mixer.init()
+	pygame.mixer.Sound(file=a.wav).play()
  
 	# --- Screen-clearing code goes here
  
