@@ -1,6 +1,8 @@
 # gr-soundboard
 Simple keyboard-operated soundboard software, made in Javascript/HTML5.
 
+**Notice: due to a Webkit-based feature, this program is only guaranteed to work in** [Google Chrome](http://chrome.google.com).
+
 ### File Operation
 
 Please place each of your sound cues in a designated folder in a place you will remember.
