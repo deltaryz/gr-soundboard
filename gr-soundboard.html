@@ -8,50 +8,80 @@
 </head>
 
 <body style="font-family: 'Roboto', sans-serif;">
+	
+	<!-- If the browser is not Chrome, nag at the user to use a browser that isn't garbage' -->
 	<p id="chromenotice"><b>NOTICE: THIS PROGRAM ONLY WORKS IN <a href="http://chrome.google.com/">GOOGLE CHROME</a>.
 	<br/>If Chrome is not the default browser, right-click gr-soundboard.html, select "Open With", and press "Google Chrome".</b></p>
 	
 	Select the folder containing your sound effects:<br/>
 	<input type="file" onChange="loadFolder(event)" webkitdirectory>
+	
 	<br/><br/>
+	
 	<b>Please click inside this box to use the soundboard.</b><br/>
 	<input id='my' type="text">
+	
 	<br /><br />
+	
 	Type a character inside this box and press the corresponding button to set its play mode.<br/>
 	<input id="playmode" type="text"><button onclick="setMode('trigger')">Trigger</button><button onclick="setMode('toggle')">Toggle</button>
+	
 	<br/><br/>
+	
 	<p id='list'></p>
+	
 	<br/><br/>
+	
+	<!-- Usage instructions, hidden by default. Has a button to reveal them -->
 	<p><b>INSTRUCTIONS</b></p><button onclick="toggleVisible()">Show/Hide</button>
-	<p id='instructions' hidden>Please place each of your sound cues in a designated folder in a place you will remember.<br/>Each cue must have a filename consisting of a number or lowercase letter, followed by ".wav".<br/><br/>Any of the following are valid:<br/>-  1.wav<br/>-  a.wav<br/>-  h.wav<br/><br/>
-	But these are not:<br/>
-	-  A.wav<br/>
-	-  j.mp3<br/>
-	-  knock.wav<br/><br/>
-	The filename will determine which key on the keyboard will trigger the sounds.<br/><br/>
+	
+	<p id='instructions' hidden>Please place each of your sound cues in a designated folder in a place you will remember.
+	<br/>
+	Each cue must have a filename consisting of a number or lowercase letter, followed by ".wav".
+	<br/><br/>
+	Any of the following are valid:
+	<br/>-  1.wav
+	<br/>-  a.wav
+	<br/>-  h.wav
+	<br/><br/>
+	But these are not:
+	<br/>-  A.wav
+	<br/>-  j.mp3
+	<br/>-  knock.wav
+	<br/><br/>
+	The filename will determine which key on the keyboard will trigger the sounds.
+	<br/><br/>
 	There are two play modes: TRIGGER and TOGGLE.<br/>
 	The TRIGGER mode will play the sound from the beginning every time you press the button, and play until completion.<br/>
-	The TOGGLE mode will play the sound from the beginning, and pressing the button again will stop the sound as it is playing.<br/><br/>
+	The TOGGLE mode will play the sound from the beginning, and pressing the button again will stop the sound as it is playing.
+	<br/><br/>
 	If you have any songs or sound effects that are NOT a .wav file, please convert them using Audacity. If the file does not show up in the soundboard list when you select the folder, it either is not a WAV file, or has an incorrect file name.<br/>
-	To convert an audio file to WAV, simply drag the audio into Audacity, click the "Stereo" text on the left side of the audio track, go to File -> Export Audio, and make sure the filetype is set to WAV 16-bit.<br /><br />
+	To convert an audio file to WAV, simply drag the audio into Audacity, click the "Stereo" text on the left side of the audio track, go to File -> Export Audio, and make sure the filetype is set to WAV 16-bit.
+	<br /><br />
 	If there are still issues loading sounds, try moving the soundboard program or sound effects to different locations.
 	</p><br/><br/><br/>
 	
 	Soundboard created by <a href="http://cameronseid.com">Cameron Seid</a>, <a href="mailto:me@cameronseid.com">me@cameronseid.com</a>
 	
 	<script>
+		
+		// Show nag header if browser isn't Chrome
 		if(navigator.userAgent.toLowerCase().indexOf('chrome') > -1){
 			document.getElementById("chromenotice").innerHTML = "";
 		}
+		
+		// Initialize variables for keeping track of loaded files
 		var audioNames = {
 			names: [],
 			modes: []
 		};
-		var audioFiles = [];
 		
+		// Used for toggle mode
 		var currentPlayingAudio = undefined;
 		
+		// When a key is pressed inside the soundboard textbox
 		document.getElementById('my').onkeypress = function(event) {
+			// If audio has been paused but the object still exists, remove it 
 			if(currentPlayingAudio != undefined && currentPlayingAudio.paused){
 				currentPlayingAudio = undefined;
 			}
@@ -87,8 +117,14 @@
 			}
 		}
 		
+		// Called whenever a folder is loaded
+		// Places usable files into an array, index values between names/modes should refer to the same file
 		function loadFolder(e) {
-			audioFiles = e.target.files;
+			var audioFiles = e.target.files;
+			audioNames = {
+				names: [],
+				modes: []
+			}
 			for (var i=0, file; file=audioFiles[i]; i++) {
 				if(file.name.indexOf(".wav") > -1 && file.name.length == 5){
 					audioNames.names.push(file.name.substr(0, file.name.length - 4));
@@ -101,6 +137,7 @@
 			updateList();
 		}
 		
+		// Changes the play mode of loaded files
 		function setMode(mode){
 			var char = document.getElementById("playmode").value;
 			var charIndex = audioNames.names.indexOf(char);
@@ -114,6 +151,7 @@
 			updateList();
 		}
 		
+		// Refreshes and re-writes the list of loaded files
 		function updateList(){
 			document.getElementById("list").innerHTML = "<b>CURRENTLY LOADED SOUNDS:</b><br/>";
 			for(var i=0; i < audioNames.names.length; i++){
@@ -121,6 +159,7 @@
 			}
 		}
 		
+		// Toggles visibility of the instructions
 		function toggleVisible(){
 			var instructions = document.getElementById("instructions");
 			instructions.hidden = !instructions.hidden;
